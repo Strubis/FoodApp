@@ -1,5 +1,5 @@
-# Aplicativo de Desafios de Lógica
+# Aplicativo de Pedidos como Ifood
 
-Construído em Flutter, o objetivo do aplicativo é
-melhorar o raciocínio dos usuários ao oferecer
-desafios em nível médio e difícil
+Construído em Flutter para a Pós Graduação em Dispositivos
+Móveis de Multiplataforma, o objetivo do aplicativo é
+facilitar o controle de pedidos de micro empreendedores.

@@ -1,22 +1,42 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:logic_app/core/constants.dart';
-import 'package:logic_app/core/theme_app.dart';
-import 'package:logic_app/pages/welcome_page.dart';
+import 'package:logic_app/controllers/user_controller.dart';
+import 'package:logic_app/firebase_options.dart';
+import 'package:logic_app/pages/home_page.dart';
+import 'package:logic_app/pages/login_page.dart';
+import 'package:logic_app/utils/create_text_theme.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // final brightness = View.of(context).platformDispatcher.platformBrightness;
+    TextTheme textTheme = createTextTheme(
+        context, "Montserrat Alternates", "Montserrat Alternates");
+    // MaterialTheme theme = MaterialTheme(textTheme);
+
     return MaterialApp(
-      title: APP_TITLE,
       debugShowCheckedModeBanner: false,
-      theme: themeApp,
-      home: WelcomePage(),
+      // theme: brightness == Brightness.light ? theme.light() : theme.dark(),
+      theme: ThemeData(
+        useMaterial3: true,
+        colorSchemeSeed: Colors.deepOrange,
+        textTheme: textTheme,
+      ),
+      // darkTheme: ThemeData(
+      //   useMaterial3: true,
+      //   colorSchemeSeed: Colors.deepOrange,
+      //   textTheme: textTheme,
+      //   brightness: Brightness.dark,
+      // ),
+      home: UserController.user != null ? const HomePage() : const LoginPage(),
     );
   }
 }
