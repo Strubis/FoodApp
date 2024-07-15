@@ -5,9 +5,13 @@ import 'package:logic_app/pages/item_description_page.dart';
 
 class CustomListTile extends StatelessWidget {
   final List<Lunch> listLunch;
+  final List<CartItem> cartList;
+  final ValueNotifier cartItemQtd;
 
   const CustomListTile({
     required this.listLunch,
+    required this.cartList,
+    required this.cartItemQtd,
   });
 
   @override
@@ -49,9 +53,12 @@ class CustomListTile extends StatelessWidget {
         const SnackBar(content: Text('Produto no carrinho!')),
       );
 
-      final l = result as CartItem;
-      print('name: ${l.lunch.nome}');
-      print('qtd: ${l.quantity}');
+      final lunch = result as CartItem;
+      print('name: ${lunch.lunch.nome}');
+      print('qtd: ${lunch.quantity}');
+      print('final price: ${lunch.finalPrice}');
+      cartList.add(lunch);
+      cartItemQtd.value++;
     }
   }
 }

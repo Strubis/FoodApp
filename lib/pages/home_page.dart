@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dynamic_tabbar/dynamic_tabbar.dart';
 import 'package:flutter/material.dart';
+import 'package:logic_app/models/cart_item.dart';
 import 'package:logic_app/models/lunch.dart';
+import 'package:logic_app/pages/cart_page.dart';
 import 'package:logic_app/pages/login_page.dart';
 import 'package:logic_app/widgets/custom_list_tile.dart';
+import 'package:badges/badges.dart' as badges;
 
 import '../controllers/user_controller.dart';
 
@@ -18,6 +21,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late TabController _tabController;
   static List<String> list = List.empty(growable: true);
   FirebaseFirestore db = FirebaseFirestore.instance;
+  final List<CartItem> _cartList = [];
+  final cartItemQtd = ValueNotifier<int>(0);
 
   List<TabData> tabs = [
     TabData(
@@ -43,10 +48,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         if (menuByData.docs.isNotEmpty) {
           menuByData.docs.forEach((ln) {
             Lunch lunch = Lunch(
-              ln['nome'], 
-              ln['descricao'], 
+              ln['nome'],
+              ln['descricao'],
               ln['url_image'],
-              ln['preco'], 
+              ln['preco'],
             );
             lunchList.add(lunch);
           });
@@ -60,6 +65,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
         ),
         content: CustomListTile(
           listLunch: lunchList,
+          cartList: _cartList,
+          cartItemQtd: cartItemQtd,
         ),
       );
       tabs.add(newTab);
@@ -96,20 +103,34 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
             },
             icon: const Icon(Icons.logout_sharp),
           ),
-          // bottom: TabBar(
-          //   tabAlignment: TabAlignment.start,
-          //   isScrollable: true,
-          //   controller: _tabController,
-          //   tabs: list
-          //       .map((e) => Tab(
-          //             text: e,
-          //           ))
-          //       .toList(),
-          // ),
           actions: [
-            IconButton(
-              onPressed: () async {},
-              icon: const Icon(Icons.shopping_cart),
+            badges.Badge(
+              badgeContent: ValueListenableBuilder(
+                valueListenable: cartItemQtd,
+                builder: (context, value, widget) {
+                  print('list: ${_cartList.length}');
+                  return Text(
+                    _cartList.length.toString(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 10,
+                    ),
+                  );
+                },
+              ),
+              position: badges.BadgePosition.custom(start: 30, bottom: 30),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartPage(cartList: _cartList, cartQtd: cartItemQtd,),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.shopping_cart),
+              ),
             ),
             CircleAvatar(
               foregroundImage:

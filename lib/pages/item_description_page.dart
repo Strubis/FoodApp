@@ -153,10 +153,15 @@ class _DescriptionState extends State<DescriptionItemPage>
           // ),
           ElevatedButton(
             onPressed: () {
-              CartItem cartItem = CartItem(lunch, _obs, _qtd);
+              if (mounted && _qtd > 0) {
+                double finalPrice = _qtd * lunch.preco;
 
-              if (mounted) {
+                CartItem cartItem = CartItem(lunch, _obs, _qtd, finalPrice);
                 Navigator.pop(context, cartItem);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text('Adicione pelo menos um produto!')),
+                );
               }
             },
             child: const Text('Adicionar'),
