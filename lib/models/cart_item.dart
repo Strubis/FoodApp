@@ -11,10 +11,10 @@ class CartItem{
   String showItem(){
     /** 
      * ---------
-     * {nome} - {quantidade}
+     * {quantidade} - {nome}
      * {obs}
      * ---------
     */
-    return "${lunch.nome} - $quantity\n$descricao\n---------\n";
+    return "${quantity}x - ${lunch.nome}\n${descricao.isNotEmpty ? "$descricao\n-------🍟-------🍔---------🥤\n" : "-------🍟-------🍔---------🥤\n"}";
   }
 }

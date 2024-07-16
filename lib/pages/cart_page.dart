@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:logic_app/controllers/user_controller.dart';
 import 'package:logic_app/models/cart_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,17 +34,20 @@ class _CartPageState extends State<CartPage> {
   }
 
   String _buildText(List<CartItem> items) {
-    String text = "Seu pedido no Sofhi's Burguer:\n\n---------\n";
+    String text = "Meu pedido no Sofhi's Burguer 😋🧑‍🍳:\n\n-------🍟-------🍔---------🥤\n";
 
     items.forEach((item) {
       text += item.showItem();
     });
 
+    text += "\nTotal para pagar: R\$ ${totalPrice.toStringAsFixed(2)}\n\nObrigado pela preferência 🫶! \n";
+    text += "Volte sempre Sr(a) ${UserController.user?.displayName} 🤝❤!\n\nClique para enviar o pedido para confirmar... ➤";
     return text;
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -142,51 +146,59 @@ class _CartPageState extends State<CartPage> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           widget.cartList.isNotEmpty
-              ? Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 20),
-                      child: Text(
-                        'Total: R\$ ${totalPrice.toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                        ),
+              ? Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(
+                        color: Colors.deepOrange,
+                        width: 0.4,
                       ),
                     ),
-                    TextButton(
-                      // onPressed: () async {
-                      //   var phone = '+5516988720562';
-
-                      //   // Uri uri = Uri.parse('https://whatsapp://send?phone=$phone&text=hello');
-                      //   final url = Uri.parse(
-                      //       Uri.encodeFull('https://wa.me/$phone?text=hello'));
-
-                      //   if (await canLaunchUrl(url)) {
-                      //     await launchUrl(url);
-                      //   } else {
-                      //     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      //       content: Text('Erro ao enviar pedido!'),
-                      //     ));
-                      //   }
-                      // },
-                      onPressed: () {
-                        _buildText(widget.cartList);
-                      },
-                      child: const Row(
-                        children: [
-                          Icon(Icons.mobile_screen_share),
-                          Text('Enviar Pedido')
-                        ],
-                      ),
-                      style: ButtonStyle(
-                        elevation: MaterialStateProperty.all(10),
-                        side: const MaterialStatePropertyAll(
-                          BorderSide(style: BorderStyle.solid),
+                  ),
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(right: 20),
+                        child: Text(
+                          'Total: R\$ ${totalPrice.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        backgroundColor: const MaterialStatePropertyAll(Color.fromARGB(255, 255, 244, 227))
                       ),
-                    ),
-                  ],
+                      TextButton(
+                        onPressed: () async {
+                          var phone = '+5516988720562';
+                          String text = _buildText(widget.cartList);
+
+                          // Uri uri = Uri.parse('https://whatsapp://send?phone=$phone&text=hello');
+                          final url = Uri.parse(
+                              Uri.encodeFull('https://wa.me/$phone?text=$text'));
+
+                          if (await canLaunchUrl(url)) {
+                            await launchUrl(url);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                              content: Text('Erro ao enviar pedido!'),
+                            ));
+                          }
+                        },
+                        child: const Row(
+                          children: [
+                            Icon(Icons.mobile_screen_share),
+                            Text('Enviar Pedido')
+                          ],
+                        ),
+                        style: ButtonStyle(
+                            elevation: MaterialStateProperty.all(10),
+                            side: const MaterialStatePropertyAll(
+                              BorderSide(style: BorderStyle.solid),
+                            ),
+                            backgroundColor: const MaterialStatePropertyAll(
+                                Color.fromARGB(255, 255, 244, 227))),
+                      ),
+                    ],
+                  ),
                 )
               : const Text(''),
         ],
