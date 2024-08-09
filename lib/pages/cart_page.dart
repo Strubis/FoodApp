@@ -34,20 +34,22 @@ class _CartPageState extends State<CartPage> {
   }
 
   String _buildText(List<CartItem> items) {
-    String text = "Meu pedido no Sofhi's Burguer 😋🧑‍🍳:\n\n-------🍟-------🍔---------🥤\n";
+    String text =
+        "Meu pedido no Burguer App 😋🧑‍🍳:\n\n-------🍟-------🍔---------🥤\n";
 
     items.forEach((item) {
       text += item.showItem();
     });
 
-    text += "\nTotal para pagar: R\$ ${totalPrice.toStringAsFixed(2)}\n\nObrigado pela preferência 🫶! \n";
-    text += "Volte sempre Sr(a) ${UserController.user?.displayName} 🤝❤!\n\nClique para enviar o pedido para confirmar... ➤";
+    text +=
+        "\nTotal para pagar: R\$ ${totalPrice.toStringAsFixed(2)}\n\nObrigado pela preferência 🫶! \n";
+    text +=
+        "Volte sempre Sr(a) ${UserController.user?.displayName} 🤝❤!\n\nClique para enviar o pedido para confirmar... ➤";
     return text;
   }
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -132,11 +134,16 @@ class _CartPageState extends State<CartPage> {
                 )
                 .toList()
             : [
-                const Center(
-                  child: Text(
-                    'Seu carrinho está vazio',
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 18.0),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    bottom: 10,
+                  ),
+                  child: Center(
+                    child: Text(
+                      'Carrinho vazio',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 18.0),
+                    ),
                   ),
                 ),
                 const Icon(Icons.remove_shopping_cart),
@@ -172,30 +179,40 @@ class _CartPageState extends State<CartPage> {
                           String text = _buildText(widget.cartList);
 
                           // Uri uri = Uri.parse('https://whatsapp://send?phone=$phone&text=hello');
-                          final url = Uri.parse(
-                              Uri.encodeFull('https://wa.me/$phone?text=$text'));
+                          final url = Uri.parse(Uri.encodeFull(
+                              'https://wa.me/$phone?text=$text'));
 
                           if (await canLaunchUrl(url)) {
                             await launchUrl(url);
+                            if (mounted) {
+                              setState(() {
+                                widget.cartList.clear();
+                                widget.cartQtd.value = 0;
+                              });
+                              Navigator.pop(context);
+                            }
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
                               content: Text('Erro ao enviar pedido!'),
                             ));
                           }
                         },
+                        style: ButtonStyle(
+                          elevation: MaterialStateProperty.all(10),
+                          side: const MaterialStatePropertyAll(
+                            BorderSide(style: BorderStyle.solid),
+                          ),
+                          backgroundColor: const MaterialStatePropertyAll(
+                            Color.fromARGB(255, 255, 244, 227),
+                          ),
+                        ),
                         child: const Row(
                           children: [
                             Icon(Icons.mobile_screen_share),
                             Text('Enviar Pedido')
                           ],
                         ),
-                        style: ButtonStyle(
-                            elevation: MaterialStateProperty.all(10),
-                            side: const MaterialStatePropertyAll(
-                              BorderSide(style: BorderStyle.solid),
-                            ),
-                            backgroundColor: const MaterialStatePropertyAll(
-                                Color.fromARGB(255, 255, 244, 227))),
                       ),
                     ],
                   ),

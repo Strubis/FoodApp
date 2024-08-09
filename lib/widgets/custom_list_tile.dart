@@ -54,9 +54,6 @@ class CustomListTile extends StatelessWidget {
       );
 
       final lunch = result as CartItem;
-      print('name: ${lunch.lunch.nome}');
-      print('qtd: ${lunch.quantity}');
-      print('final price: ${lunch.finalPrice}');
       cartList.add(lunch);
       cartItemQtd.value++;
     }

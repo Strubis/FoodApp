@@ -23,6 +23,14 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               const Spacer(),
+              const Text(
+                'Food App',
+                style: TextStyle(
+                  fontSize: 25,
+                  
+                ),
+              ),
+              const Spacer(),
               ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 380),
                 child: Image.asset('assets/food.png'),

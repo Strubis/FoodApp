@@ -5,6 +5,7 @@ import 'package:logic_app/models/cart_item.dart';
 import 'package:logic_app/models/lunch.dart';
 import 'package:logic_app/pages/cart_page.dart';
 import 'package:logic_app/pages/login_page.dart';
+import 'package:logic_app/widgets/about_dialog.dart';
 import 'package:logic_app/widgets/custom_list_tile.dart';
 import 'package:badges/badges.dart' as badges;
 
@@ -108,7 +109,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
               badgeContent: ValueListenableBuilder(
                 valueListenable: cartItemQtd,
                 builder: (context, value, widget) {
-                  print('list: ${_cartList.length}');
                   return Text(
                     _cartList.length.toString(),
                     style: const TextStyle(
@@ -125,12 +125,23 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => CartPage(cartList: _cartList, cartQtd: cartItemQtd,),
+                      builder: (context) => CartPage(
+                        cartList: _cartList,
+                        cartQtd: cartItemQtd,
+                      ),
                     ),
                   );
                 },
                 icon: const Icon(Icons.shopping_cart),
               ),
+            ),
+            IconButton(
+              onPressed: () {
+                showDialog(context: context, builder: (BuildContext context){
+                  return CustomAboutDialog();
+                });
+              },
+              icon: const Icon(Icons.question_mark),
             ),
             CircleAvatar(
               foregroundImage:
