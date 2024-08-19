@@ -60,7 +60,6 @@ class _LoginPageState extends State<LoginPage> {
                           builder: (context) => const HomePage()));
                     }
                   } on FirebaseAuthException catch (error) {
-                    print(error.message);
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
                         content: Text(
@@ -69,7 +68,6 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     );
                   } catch (error) {
-                    print(error);
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
